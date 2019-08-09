@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall")
 
 add_executable(gl_tetris_cpp
-        libs/stb/stb_image.h
         src/main.cpp)
 
 find_package(GLFW3 REQUIRED)
@@ -15,7 +14,6 @@ find_package(GLEW REQUIRED)
 
 target_include_directories(gl_tetris_cpp PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/stb
         ${GLFW_INCLUDE_DIR}
         ${OPENGL_INCLUDE_DIR}
         ${GLM_INCLUDE_DIR}
