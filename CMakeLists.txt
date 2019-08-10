@@ -5,6 +5,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall")
 
 add_executable(gl_tetris_cpp
+        src/resource_manager.cpp
+        src/graphics/shader.cpp
+        src/graphics/texture.cpp
+        src/graphics/batch.cpp
         src/main.cpp)
 
 find_package(GLFW3 REQUIRED)
