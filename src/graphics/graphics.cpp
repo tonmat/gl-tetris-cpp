@@ -38,7 +38,7 @@ void Resize(GLFWwindow *window, int width, int height) {
   auto y = (height - h) / 2;
 
   glViewport(x, y, w, h);
-  std::cout << "Viewport set to " << width << " x " << height << std::endl;
+  std::cout << "Viewport set to " << w << " x " << h << std::endl;
 }
 
 void Run(Config const &config) {
@@ -87,8 +87,6 @@ void Run(Config const &config) {
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1);
   glewInit();
-  glfwGetFramebufferSize(window, &width, &height);
-  Resize(window, width, height);
 
   std::cout << "GLFW " << glfwGetVersionString() << std::endl;
   std::cout << "GLEW " << glewGetString(GLEW_VERSION) << std::endl;
