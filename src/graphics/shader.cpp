@@ -1,6 +1,6 @@
 #include "shader.h"
 #include "GL/glew.h"
-#include "resource_manager.h"
+#include "graphics.h"
 
 #include <iostream>
 #include <filesystem>
@@ -67,7 +67,7 @@ unsigned int Shader::CreateShader(std::string const &path) {
     return 0;
   }
 
-  auto source = resource_manager::Read(path);
+  auto source = Read(path);
   auto shader = glCreateShader(type);
   GLchar const *c_str = source.c_str();
   GLint size = source.size();
