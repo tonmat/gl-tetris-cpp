@@ -11,6 +11,17 @@ find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 
 
+add_library(game
+        src/game/shape.cpp
+        src/game/player.cpp
+        src/game/row.cpp
+        src/game/board.cpp
+        src/game/game.cpp)
+
+target_include_directories(game PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/game)
+
+
 add_library(graphics
         src/graphics/surface.cpp
         src/graphics/shader.cpp
@@ -41,6 +52,7 @@ target_include_directories(gl_tetris_cpp PRIVATE
         ${GLM_INCLUDE_DIR})
 
 target_link_libraries(gl_tetris_cpp
+        game
         glm
         graphics)
 

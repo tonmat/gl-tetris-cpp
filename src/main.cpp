@@ -4,12 +4,15 @@
 #include <graphics/texture.h>
 #include <graphics/batch.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <game/game.h>
 
 glm::mat4 projection;
 graphics::Shader *shader;
 graphics::Texture *texture;
 graphics::Sprite *sprite;
 graphics::Batch *batch;
+
+game::Game *g;
 
 void Initialize() {
   projection = glm::ortho(0.0f, 15.0f, 0.0f, 20.0f);
@@ -27,10 +30,21 @@ void Initialize() {
   };
 
   batch = new graphics::Batch(2048);
+
+  g = new game::Game(10, 20);
+}
+
+void Terminate() {
+  delete g;
+
+  delete batch;
+  delete sprite;
+  delete texture;
+  delete shader;
 }
 
 void Update(float delta) {
-
+  g->Update(delta);
 }
 
 void Render(double time) {
@@ -47,6 +61,7 @@ int main() {
                     .update_rate = 16,
                     .clear_color = {0, .025f, 0},
                     .on_initialize = Initialize,
+                    .on_terminate = Terminate,
                     .on_update = Update,
                     .on_render = Render,
                 });

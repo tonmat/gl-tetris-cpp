@@ -48,6 +48,7 @@ void Run(Config const &config) {
   auto update_rate = config.update_rate;
   auto clear_color = config.clear_color;
   auto on_initialize = config.on_initialize;
+  auto on_terminate = config.on_terminate;
   auto on_update = config.on_update;
   auto on_render = config.on_render;
   ratio = (double) width / height;
@@ -122,10 +123,11 @@ void Run(Config const &config) {
     glfwPollEvents();
   }
 
+  on_terminate();
+
   glfwHideWindow(window);
   glfwDestroyWindow(window);
   glfwTerminate();
-
 }
 
 }

@@ -17,6 +17,7 @@ struct Config {
   float update_rate;
   Color clear_color;
   Callback on_initialize;
+  Callback on_terminate;
   UpdateCallback on_update;
   RenderCallback on_render;
 };
