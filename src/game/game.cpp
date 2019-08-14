@@ -137,7 +137,7 @@ void Game::UpdateShadow() {
   shadow_.Set(player_);
   if (shadow_.size() <= 0)
     return;
-  while (shadow_.y >= 0) {
+  while (true) {
     shadow_.y--;
     if (!board_.CheckPlayer(shadow_)) {
       shadow_.y++;
