@@ -11,7 +11,7 @@ Board::~Board() {
   delete[] rows_;
 }
 
-bool Board::CheckPlayer(Player const &player) const {
+bool Board::CheckPlayer(Player const &player, bool ignoreRow) const {
   if (player.size() <= 0)
     return false;
   for (unsigned char y = 0; y < player.size(); y++) {
@@ -23,7 +23,7 @@ bool Board::CheckPlayer(Player const &player) const {
       auto bx = player.x + x;
       if (IsOutOfBounds(bx, by))
         return false;
-      if (row.HasCell(bx))
+      if (!ignoreRow && row.HasCell(bx))
         return false;
     }
   }
@@ -64,7 +64,7 @@ void Board::RemoveRow(unsigned char y) {
 }
 
 void Board::Clear() {
-  for (unsigned char i = 0; i < height_ - 1; i++)
+  for (unsigned char i = 0; i < height_; i++)
     rows_[i].mask_ = 0u;
 }
 

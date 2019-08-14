@@ -84,6 +84,35 @@ void Batch::Draw(Sprite const &sprite) {
   count_ = new_count;
 }
 
+void Batch::Draw(Label const &label) {
+  float w;
+  switch (label.h_align) {
+    default:
+      w = 0.0f;
+      break;
+    case HAlign::kCenter:
+      w = GetLabelWidth(label) / 2.0f;
+      break;
+    case HAlign::kRight:
+      w = GetLabelWidth(label);
+      break;
+  }
+  auto x = 0.0f;
+  auto y = 0.0f;
+  for (auto i = 0; i < kLabelTextMaxSize; i++) {
+    auto c = label.text[i];
+    if (c == '\0')
+      break;
+    if (c == '\n') {
+      x = 0;
+      y -= label.size * label.v_spacing;
+      continue;
+    }
+    DrawChar(label, c, x - w, y);
+    x += label.size * label.h_spacing;
+  }
+}
+
 void Batch::AddIndices() {
   auto new_size = indices_size_ + 6;
   if (indices_size_ > indices_capacity_) {
@@ -116,4 +145,56 @@ void Batch::AddSpriteVertex(Sprite const &sprite, float w, float h) {
   vertex.b = sprite.color.blue;
   vertex.a = sprite.alpha;
 }
+
+void Batch::AddLabelVertex(Label const &label, float x, float y, float w, float h, float s, float t) {
+  auto new_size = vertices_size_ + 1;
+  if (vertices_size_ > vertices_capacity_) {
+    std::cerr << "vertex array buffer overflow " << new_size << " > " << vertices_capacity_ << std::endl;
+    return;
+  }
+
+  auto &vertex = vertices_[vertices_size_++];
+  vertex.x = label.x + x + w * label.size;
+  vertex.y = label.y + y + h * label.size;
+  vertex.s = s;
+  vertex.t = t;
+  vertex.r = label.color.red;
+  vertex.g = label.color.green;
+  vertex.b = label.color.blue;
+  vertex.a = label.alpha;
+}
+
+void Batch::DrawChar(Label const &label, char c, float x, float y) {
+  auto index = c - 32;
+  auto s = index % 16;
+  auto t = index / 16;
+  auto s0 = s / 16.0f;
+  auto t0 = t / 16.0f;
+  auto s1 = (s + 1.0f) / 16.0f;
+  auto t1 = (t + 1.0f) / 16.0f;
+  AddIndices();
+  AddLabelVertex(label, x, y, 0, 1, s0, t0);
+  AddLabelVertex(label, x, y, 0, 0, s0, t1);
+  AddLabelVertex(label, x, y, 1, 1, s1, t0);
+  AddLabelVertex(label, x, y, 1, 0, s1, t1);
+}
+
+float Batch::GetLabelWidth(Label const &label) {
+  auto w = 0;
+  auto x = 0;
+  for (auto i = 0; i < kLabelTextMaxSize; i++) {
+    auto c = label.text[i];
+    if (c == '\0')
+      break;
+    if (c == '\n') {
+      w = std::max(w, x);
+      x = 0;
+      continue;
+    }
+    x++;
+  }
+  w = std::max(w, x);
+  return label.size * (label.h_spacing * (w - 1) + 1);
+}
+
 }

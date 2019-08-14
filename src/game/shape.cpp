@@ -2,9 +2,9 @@
 
 #include <algorithm>
 #include <random>
+#include <chrono>
 
-static std::random_device rd;
-static std::mt19937 gen(rd());
+static std::mt19937 gen(std::chrono::steady_clock::now().time_since_epoch().count());
 static std::uniform_int_distribution<std::mt19937::result_type> dis(0, 6);
 static game::Shape kShapes[]{
     {4, 0b0000111100000000},
@@ -88,11 +88,11 @@ void Shape::CalculateCenter() {
         continue;
       min_x = std::min(x, min_x);
       min_y = std::min(y, min_y);
-      max_x = std::max(x, max_x);
-      max_y = std::max(y, max_y);
+      max_x = std::max(static_cast<unsigned char>(x + 1u), max_x);
+      max_y = std::max(static_cast<unsigned char>(y + 1u), max_y);
     }
-  center_x_ = static_cast<float>(min_x + max_x) / 2;
-  center_y_ = static_cast<float>(min_y + max_y) / 2;
+  center_x_ = static_cast<float>(min_x + max_x) / 2.0f;
+  center_y_ = static_cast<float>(min_y + max_y) / 2.0f;
 }
 
 }

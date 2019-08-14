@@ -9,9 +9,12 @@ Game::Game(unsigned char boardWidth, unsigned char boardHeight) : board_(boardWi
 
 void Game::Reset() {
   inputs = {};
+  game_over_ = false;
   time_ = 0.0f;
   clear_time_ = 0.0f;
   level_ = 1;
+  count_ = 0;
+  score_ = 0;
   fall_cd_ = 0.0f;
   clear_cd_ = 0.0f;
   clear_y0_ = 0;
@@ -26,6 +29,8 @@ void Game::Reset() {
 }
 
 void Game::Update(float delta) {
+  if (game_over_)
+    return;
   time_ += delta;
   if (clear_cd_ > 0) {
     UpdateClear(delta);
@@ -122,8 +127,14 @@ void Game::UpdateFall(float delta) {
       next_.Random();
       can_hold_ = true;
       UpdateShadow();
+      if (!game_over_ && player_.size() > 0) {
+        count_++;
+        if (count_ % 8 == 0 && level_ < 99)
+          level_++;
+      }
       return;
     }
+    score_ += 1u << rows * 2u;
     clear_cd_ = 0.8f;
     clear_time_ = time_;
     clear_y0_ = std::max(player_.y, '\0');
@@ -146,17 +157,21 @@ void Game::UpdateShadow() {
   }
 }
 
-bool Game::SetPlayer(Shape &shape) {
+void Game::SetPlayer(Shape &shape) {
   player_.Set(shape);
   player_.x = (board_.width() - player_.size()) / 2;
   player_.y = board_.height() - 1;
   char tries = player_.size();
   while (tries-- > 0) {
     player_.y--;
-    if (board_.CheckPlayer(player_))
-      return true;
+    if (board_.CheckPlayer(player_, true))
+      break;
   }
-  return false;
+  if (!board_.CheckPlayer(player_)) {
+    game_over_ = true;
+    board_.PlacePlayer(player_);
+    player_.Clear();
+  }
 }
 
 }

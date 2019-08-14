@@ -11,7 +11,7 @@ class Board {
   Board(unsigned char width, unsigned char height);
   virtual ~Board();
 
-  [[nodiscard]] bool CheckPlayer(Player const &player) const;
+  [[nodiscard]] bool CheckPlayer(Player const &player, bool ignoreRow = false) const;
   unsigned char PlacePlayer(Player const &player);
   [[nodiscard]] bool IsOutOfBounds(char x, char y) const;
   [[nodiscard]] bool IsFullRow(unsigned char y) const;

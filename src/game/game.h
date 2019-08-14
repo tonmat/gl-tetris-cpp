@@ -16,11 +16,14 @@ class Game {
   void Update(float delta);
 
   Input inputs{};
+  [[nodiscard]] bool game_over() const { return game_over_; }
   [[nodiscard]] float time() const { return time_; }
   [[nodiscard]] float clear_time() const { return clear_time_; }
   [[nodiscard]] unsigned char level() const { return level_; }
+  [[nodiscard]] unsigned short score() const { return score_; }
   [[nodiscard]] float fall_cd() const { return fall_cd_; }
   [[nodiscard]] float clear_cd() const { return clear_cd_; }
+  [[nodiscard]] bool can_hold() const { return can_hold_; }
   [[nodiscard]]  Board const &board() const { return board_; }
   [[nodiscard]]  Player const &player() const { return player_; }
   [[nodiscard]]  Player const &shadow() const { return shadow_; }
@@ -36,13 +39,16 @@ class Game {
   void UpdateFall(float delta);
   void UpdateShadow();
 
-  bool SetPlayer(Shape &shape);
+  void SetPlayer(Shape &shape);
 
   [[nodiscard]] float next_fall_cd() const { return 0.1f + 0.9f * (99.0f - static_cast<float>(level_)) / 98.0f; };
 
+  bool game_over_;
   float time_;
   float clear_time_;
   unsigned char level_;
+  unsigned short count_;
+  unsigned short score_;
   float fall_cd_;
   float clear_cd_;
   char clear_y0_;

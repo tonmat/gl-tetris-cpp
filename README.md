@@ -3,9 +3,21 @@ A simple tetris game using OpenGL
 
 ## Install
 
-**TODO**
+```
+cmake --build cmake-build-debug --target gl_tetris_cpp
+```
+
+### Dependencies
+- GLFW3
+- OpenGL
+- GLM
+- GLEW
 
 ## Run
+
+```
+./cmake-build-debug/gl_tetris_cpp.exe
+```
 
 **TODO**
 
