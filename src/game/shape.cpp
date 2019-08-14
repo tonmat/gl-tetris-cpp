@@ -1,6 +1,20 @@
 #include "shape.h"
 
 #include <algorithm>
+#include <random>
+
+static std::random_device rd;
+static std::mt19937 gen(rd());
+static std::uniform_int_distribution<std::mt19937::result_type> dis(0, 6);
+static game::Shape kShapes[]{
+    {4, 0b0000111100000000},
+    {3, 0b010111000},
+    {3, 0b100111000},
+    {3, 0b001111000},
+    {3, 0b110011000},
+    {3, 0b011110000},
+    {2, 0b1111},
+};
 
 namespace game {
 
@@ -14,8 +28,26 @@ void Shape::Set(Shape &shape) {
   CalculateCenter();
 }
 
-bool Shape::HasCell(unsigned char x, unsigned char y) {
-  return mask_ >> (x + y * size_) == 1u;
+bool Shape::HasCell(unsigned char x, unsigned char y) const {
+  return (mask_ >> (x + y * size_) & 1u) == 1u;
+}
+
+void Shape::Clear() {
+  size_ = 0;
+  mask_ = 0;
+  center_x_ = 0;
+  center_y_ = 0;
+}
+
+void Shape::Random() {
+  Set(kShapes[dis(gen)]);
+}
+
+void Shape::Rotate(char direction) {
+  if (direction < 0)
+    RotateCCW();
+  else if (direction > 0)
+    RotateCW();
 }
 
 void Shape::RotateCW() {
@@ -24,8 +56,8 @@ void Shape::RotateCW() {
     for (unsigned char x = 0; x < size_; x++) {
       if (!HasCell(x, y))
         continue;
-      unsigned char nx = size_ - 1 - y;
-      unsigned char ny = x;
+      unsigned char nx = y;
+      unsigned char ny = size_ - 1 - x;
       new_mask |= 1u << (nx + ny * size_);
     }
   mask_ = new_mask;
@@ -38,8 +70,8 @@ void Shape::RotateCCW() {
     for (unsigned char x = 0; x < size_; x++) {
       if (!HasCell(x, y))
         continue;
-      unsigned char nx = y;
-      unsigned char ny = size_ - 1 - x;
+      unsigned char nx = size_ - 1 - y;
+      unsigned char ny = x;
       new_mask |= 1u << (nx + ny * size_);
     }
   mask_ = new_mask;

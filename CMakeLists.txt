@@ -43,6 +43,19 @@ target_link_libraries(graphics
         glm
         ${GLEW_LIBRARIES})
 
+
+add_library(inputs
+        src/inputs/inputs.cpp)
+
+target_include_directories(inputs PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/inputs
+        ${GLFW_INCLUDE_DIR})
+
+target_link_libraries(inputs
+        glfw3
+        ${GLFW_LIBRARY_DIR})
+
+
 add_executable(gl_tetris_cpp
         src/main.cpp)
 
@@ -54,7 +67,8 @@ target_include_directories(gl_tetris_cpp PRIVATE
 target_link_libraries(gl_tetris_cpp
         game
         glm
-        graphics)
+        graphics
+        inputs)
 
 
 file(GLOB SHADERS "res/shaders/*.*")

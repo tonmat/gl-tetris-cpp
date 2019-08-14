@@ -19,4 +19,10 @@ void Player::Set(Shape &shape) {
   }
 }
 
+void Player::Clear() {
+  Shape::Clear();
+  x = 0;
+  y = 0;
+}
+
 }

@@ -8,6 +8,7 @@
 
 namespace graphics {
 
+static GLFWwindow *window;
 static double ratio;
 
 std::string Read(const std::string &path) {
@@ -73,7 +74,7 @@ void Run(Config const &config) {
   }
 
   glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-  auto window = glfwCreateWindow(width, height, title, nullptr, nullptr);
+  window = glfwCreateWindow(width, height, title, nullptr, nullptr);
   if (window == nullptr) {
     std::cerr << "Could not create window" << std::endl;
     glfwTerminate();
@@ -128,6 +129,10 @@ void Run(Config const &config) {
   glfwHideWindow(window);
   glfwDestroyWindow(window);
   glfwTerminate();
+}
+
+GLFWwindow *Window() {
+  return window;
 }
 
 }

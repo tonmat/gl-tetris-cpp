@@ -11,6 +11,7 @@ class Player : public Shape {
   ~Player() override = default;
 
   void Set(Shape &shape) override;
+  void Clear() override;
 
   char x;
   char y;

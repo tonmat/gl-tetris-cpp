@@ -9,8 +9,11 @@ class Shape {
   virtual ~Shape() = default;
 
   virtual void Set(Shape &shape);
-  bool HasCell(unsigned char x, unsigned char y);
+  [[nodiscard]] bool HasCell(unsigned char x, unsigned char y) const;
+  virtual void Clear();
+  void Random();
 
+  void Rotate(char direction);
   void RotateCW();
   void RotateCCW();
 

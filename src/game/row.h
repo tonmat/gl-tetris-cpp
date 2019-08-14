@@ -8,7 +8,8 @@ class Row {
   Row();
   virtual ~Row() = default;
 
-  bool HasCell(unsigned char x);
+  [[nodiscard]] bool HasCell(unsigned char x) const;
+  void SetCell(unsigned char x);
 
  private:
   unsigned short mask_;

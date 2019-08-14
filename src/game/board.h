@@ -2,6 +2,7 @@
 #define GL_TETRIS_CPP_SRC_GAME_BOARD_H_
 
 #include "row.h"
+#include "player.h"
 
 namespace game {
 
@@ -10,8 +11,12 @@ class Board {
   Board(unsigned char width, unsigned char height);
   virtual ~Board();
 
-  bool IsFullRow(unsigned char y);
+  [[nodiscard]] bool CheckPlayer(Player const &player) const;
+  unsigned char PlacePlayer(Player const &player);
+  [[nodiscard]] bool IsOutOfBounds(char x, char y) const;
+  [[nodiscard]] bool IsFullRow(unsigned char y) const;
   void RemoveRow(unsigned char y);
+  void Clear();
 
   [[nodiscard]] unsigned char width() const { return width_; }
   [[nodiscard]] unsigned char height() const { return height_; }
